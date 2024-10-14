@@ -84,6 +84,16 @@ export function disable(req, res) {
     }
 }
 
+export function enable(req, res) {
+    if (isAdmin(req)) {
+        User.updateOne({ email: req.params.email }, { disabled: false }).then((result) => {
+            res.json({ message: "User enable success" })
+        }).catch((err) => {
+            res.json({ message: "User enable fail" })
+        });
+    }
+}
+
 // Check user hear
 function isHaveUser(req) {
     if (req.user) {

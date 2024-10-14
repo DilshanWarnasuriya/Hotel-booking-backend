@@ -1,5 +1,5 @@
 import express from "express";
-import { disable, getAll, login, save, update } from "../controllers/userController.js";
+import { disable, enable, getAll, login, save, update } from "../controllers/userController.js";
 
 const userRouter = express.Router();
 
@@ -11,6 +11,8 @@ userRouter.get("/", getAll)
 
 userRouter.put("/", update)
 
-userRouter.put("/:email", disable)
+userRouter.put("/disable/:email", disable)
+
+userRouter.put("/enable/:email", enable)
 
 export default userRouter;
