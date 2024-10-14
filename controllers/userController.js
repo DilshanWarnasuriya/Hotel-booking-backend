@@ -47,3 +47,29 @@ export function login(req, res) {
     })
 }
 
+
+
+// Check user hear
+function isHaveUser(req){
+    if(req.user){
+        return true;
+    }
+    return false;
+}
+
+// Check admin function
+function isAdmin(req){
+    if(req.user || req.user.type == "admin"){
+        return true;
+    }
+    return false;
+}
+
+// Check user(customer) function
+function isUser(req){
+    if(req.user || req.user.type == "user"){
+        return true;
+    }
+    return false;
+}
+

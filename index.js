@@ -20,7 +20,6 @@ app.use((req, res, next) => {
             if(decoded){
                 req.user = decoded;
                 next();
-                console.log(decoded);
             }
             else next();
         })
