@@ -24,7 +24,7 @@ export function save(req, res) {
 export function login(req, res) {
     User.findOne({ email: req.body.email }).then((user) => {
         if (user || !user.disabled) {
-            if(passwordHash.verify(req.body.password, user.password)){ // check password
+            if (passwordHash.verify(req.body.password, user.password)) { // check password
                 const payload = {
                     email: user.email,
                     password: user.password,
@@ -36,7 +36,7 @@ export function login(req, res) {
                     token: token
                 })
             }
-            else res.json({message: "Password is wrong"});
+            else res.json({ message: "Password is wrong" });
         }
         else res.json({ message: "User not found" });
     }).catch((err) => {
@@ -46,3 +46,4 @@ export function login(req, res) {
         })
     })
 }
+
