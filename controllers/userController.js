@@ -47,8 +47,8 @@ export function login(req, res) {
     })
 }
 
-export function getAll(req, res){
-    if(isAdmin(req)){
+export function getAll(req, res) {
+    if (isAdmin(req)) {
         User.find().then((result) => {
             res.json(result);
         }).catch((err) => {
@@ -58,16 +58,13 @@ export function getAll(req, res){
             });
         });
     }
-    else res.json({message: "not permission"});
+    else res.json({ message: "not permission" });
 }
 
-export function update(req, res){
-    if(isHaveUser(req)){
-        User.updateOne({email: req.body.email}, req.body).then((result) => {
-            res.json({
-                message: "User update success",
-                user: result
-            })
+export function update(req, res) {
+    if (isHaveUser(req)) {
+        User.updateOne({ email: req.body.email }, req.body).then((result) => {
+            res.json({ message: "User update success" })
         }).catch((err) => {
             res.json({
                 message: "User update fail",
@@ -77,25 +74,35 @@ export function update(req, res){
     }
 }
 
+export function disable(req, res) {
+    if (isAdmin(req)) {
+        User.updateOne({ email: req.params.email }, { disabled: true }).then((result) => {
+            res.json({ message: "User disable success" })
+        }).catch((err) => {
+            res.json({ message: "User disable fail" })
+        });
+    }
+}
+
 // Check user hear
-function isHaveUser(req){
-    if(req.user){
+function isHaveUser(req) {
+    if (req.user) {
         return true;
     }
     return false;
 }
 
 // Check admin function
-function isAdmin(req){
-    if(req.user && req.user.type == "admin"){
+function isAdmin(req) {
+    if (req.user && req.user.type == "admin") {
         return true;
     }
     return false;
 }
 
 // Check user(customer) function
-function isUser(req){
-    if(req.user && req.user.type == "user"){
+function isUser(req) {
+    if (req.user && req.user.type == "user") {
         return true;
     }
     return false;
