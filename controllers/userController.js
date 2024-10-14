@@ -47,7 +47,19 @@ export function login(req, res) {
     })
 }
 
-
+export function getAll(req, res){
+    if(isAdmin(req)){
+        User.find().then((result) => {
+            res.json(result);
+        }).catch((err) => {
+            res.json({
+                message: "Server error",
+                error: err
+            });
+        });
+    }
+    else res.json({message: "not permission"});
+}
 
 // Check user hear
 function isHaveUser(req){
@@ -59,7 +71,7 @@ function isHaveUser(req){
 
 // Check admin function
 function isAdmin(req){
-    if(req.user || req.user.type == "admin"){
+    if(req.user && req.user.type == "admin"){
         return true;
     }
     return false;
@@ -67,7 +79,7 @@ function isAdmin(req){
 
 // Check user(customer) function
 function isUser(req){
-    if(req.user || req.user.type == "user"){
+    if(req.user && req.user.type == "user"){
         return true;
     }
     return false;
