@@ -61,6 +61,22 @@ export function getAll(req, res){
     else res.json({message: "not permission"});
 }
 
+export function update(req, res){
+    if(isHaveUser(req)){
+        User.updateOne({email: req.body.email}, req.body).then((result) => {
+            res.json({
+                message: "User update success",
+                user: result
+            })
+        }).catch((err) => {
+            res.json({
+                message: "User update fail",
+                user: err
+            })
+        });
+    }
+}
+
 // Check user hear
 function isHaveUser(req){
     if(req.user){
