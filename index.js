@@ -1,9 +1,10 @@
-import bodyParser from "body-parser";
 import express from "express";
+import bodyParser from "body-parser";
 import dotenv from 'dotenv'
 import mongoose from "mongoose";
-import userRouter from "./routers/userRouter.js";
 import jwt from "jsonwebtoken";
+import userRouter from "./routers/userRouter.js";
+import eventRouter from "./routers/eventRouter.js";
 
 const app = express();
 dotenv.config();
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
 
 //Routers
 app.use("/api/user", userRouter);
+app.use("/api/event", eventRouter)
 
 app.listen(5000, (req, res) => {
     console.log("Application start in port 5000");
