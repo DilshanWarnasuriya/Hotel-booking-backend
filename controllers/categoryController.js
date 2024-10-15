@@ -25,3 +25,13 @@ export function getAll(req, res) {
         res.json({ message: "Server error" });
     });
 }
+
+export function remove(req, res) {
+    if (isAdmin(req)) {
+        Category.deleteOne({ name: req.params.name }).then(() => {
+            res.json({ message: "Category delete success" });
+        }).catch((err) => {
+            res.json({ message: "Category delete fail" });
+        });
+    } else res.json({ message: "not permission" });
+}
