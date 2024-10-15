@@ -1,8 +1,10 @@
 import express from 'express'
-import { save } from '../controllers/eventController.js';
+import { getAll, save } from '../controllers/eventController.js';
 
 const eventRouter = express.Router();
 
 eventRouter.post("/", save);
+
+eventRouter.get("/", getAll)
 
 export default eventRouter;
