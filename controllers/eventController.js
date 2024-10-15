@@ -27,6 +27,19 @@ export function getAll(req, res){
     });
 }
 
+export function update(req, res){
+    if(isAdmin(req)){
+        Event.updateOne({name: req.params.name}, req.body).then(() => {
+            res.json({ message: "Event update Success"});
+        }).catch((err) => {
+            res.json({ 
+                message: "Event update Fail",
+                error: err
+            });
+        });
+    }
+}
+
 export function disable(req, res){    
     Event.updateOne({name: req.params.name}, {disabled: true}).then(() => {
         res.json({ message: "Event disable Success"});
