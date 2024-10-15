@@ -1,8 +1,8 @@
 import Category from "../models/category.js";
 import { isAdmin } from "./userController.js";
 
-export function save(req, res){
-    if(isAdmin(req)){
+export function save(req, res) {
+    if (isAdmin(req)) {
         const newCategory = new Category(req.body);
         newCategory.save().then((category) => {
             res.json({
@@ -15,5 +15,13 @@ export function save(req, res){
                 error: err
             })
         });
-    }else res.json({ message: "not permission" });
+    } else res.json({ message: "not permission" });
+}
+
+export function getAll(req, res) {
+    Category.find().then((result) => {
+        res.json(result);
+    }).catch((err) => {
+        res.json({ message: "Server error" });
+    });
 }
