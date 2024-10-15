@@ -13,6 +13,14 @@ const eventSchema = mongoose.Schema({
     image: {
         type: String,
         required: true
+    },
+    disabled: {
+        type: Boolean,
+        default: false
+    },
+    note: {
+        type: String,
+        default: ""
     }
 })
 

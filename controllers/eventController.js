@@ -26,3 +26,24 @@ export function getAll(req, res){
         res.json({ message: "Server error" });
     });
 }
+
+export function disable(req, res){    
+    Event.updateOne({name: req.params.name}, {disabled: true}).then(() => {
+        res.json({ message: "Event disable Success"});
+    }).catch((err) => {
+        res.json({ 
+            message: "Event disable Fail",
+            error: err
+        });
+    });
+}
+export function enable(req, res){    
+    Event.updateOne({name: req.params.name}, {disabled: false}).then(() => {
+        res.json({ message: "Event enable Success"});
+    }).catch((err) => {
+        res.json({ 
+            message: "Event enable Fail",
+            error: err
+        });
+    });
+}
