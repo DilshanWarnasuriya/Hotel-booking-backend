@@ -30,8 +30,18 @@ export function remove(req, res) {
     if (isAdmin(req)) {
         Category.deleteOne({ name: req.params.name }).then(() => {
             res.json({ message: "Category delete success" });
-        }).catch((err) => {
+        }).catch(() => {
             res.json({ message: "Category delete fail" });
         });
     } else res.json({ message: "not permission" });
+}
+
+export function update(req, res){
+    if(isAdmin(req)){
+        Category.updateOne({name: req.params.name}, req.body).then(() => {
+            res.json({message: "Category update Success"})
+        }).catch(() => {
+            res.json({message: "Category update fail"})
+        });
+    }
 }
