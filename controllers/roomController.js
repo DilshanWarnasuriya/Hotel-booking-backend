@@ -27,6 +27,22 @@ export function getAll(req, res) {
     });
 }
 
+export function findByNumber(req, res) {
+    Room.findOne({ number: req.params.number }).then((room) => {
+        if (room) {
+            res.json({
+                message: "room found",
+                room: room
+            })
+        }
+        else {
+            res.json({ message: "room not found" })
+        }
+    }).catch((err) => {
+        res.json({ message: "Server error" })
+    });
+}
+
 export function remove(req, res) {
     if (isAdmin(req)) {
         Room.deleteOne({ number: req.params.number }).then(() => {
@@ -49,7 +65,7 @@ export function update(req, res) {
 
 export function disable(req, res) {
     if (isAdmin(req)) {
-        Room.updateOne({ number: req.params.number }, {available: false}).then(() => {
+        Room.updateOne({ number: req.params.number }, { available: false }).then(() => {
             res.json({ message: "Room disable success" })
         }).catch(() => {
             res.json({ message: "Room disable fail" })
@@ -59,7 +75,7 @@ export function disable(req, res) {
 
 export function enable(req, res) {
     if (isAdmin(req)) {
-        Room.updateOne({ number: req.params.number }, {available: true}).then(() => {
+        Room.updateOne({ number: req.params.number }, { available: true }).then(() => {
             res.json({ message: "Room enable success" })
         }).catch(() => {
             res.json({ message: "Room enable fail" })
