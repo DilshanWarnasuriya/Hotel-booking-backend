@@ -36,3 +36,13 @@ export function remove(req, res) {
         });
     } else res.json({ message: "not permission" });
 }
+
+export function update(req, res) {
+    if (isAdmin(req)) {
+        Room.updateOne({ number: req.params.number }, req.body).then(() => {
+            res.json({ message: "Room update success" })
+        }).catch(() => {
+            res.json({ message: "Room update fail" })
+        });
+    } else res.json({ message: "not permission" });
+}
