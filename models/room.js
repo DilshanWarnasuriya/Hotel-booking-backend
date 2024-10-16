@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const roomSchema = mongoose.Schema({
     number:{
         type: Number,
@@ -20,6 +19,10 @@ const roomSchema = mongoose.Schema({
         required: true
     },
     note:{
+        type: String,
+        default: ""
+    },
+    specialNote:{
         type: String,
         default: ""
     },

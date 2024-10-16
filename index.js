@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import userRouter from "./routers/userRouter.js";
 import eventRouter from "./routers/eventRouter.js";
 import categoryRouter from "./routers/categoryRouter.js";
+import roomRouter from "./routers/roomRouter.js";
 
 const app = express();
 dotenv.config();
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
 app.use("/api/user", userRouter);
 app.use("/api/event", eventRouter);
 app.use("/api/category", categoryRouter);
+app.use("/api/room", roomRouter)
 
 app.listen(5000, (req, res) => {
     console.log("Application start in port 5000");
