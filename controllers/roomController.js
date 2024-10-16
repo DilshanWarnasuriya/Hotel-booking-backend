@@ -46,3 +46,23 @@ export function update(req, res) {
         });
     } else res.json({ message: "not permission" });
 }
+
+export function disable(req, res) {
+    if (isAdmin(req)) {
+        Room.updateOne({ number: req.params.number }, {available: false}).then(() => {
+            res.json({ message: "Room disable success" })
+        }).catch(() => {
+            res.json({ message: "Room disable fail" })
+        });
+    } else res.json({ message: "not permission" });
+}
+
+export function enable(req, res) {
+    if (isAdmin(req)) {
+        Room.updateOne({ number: req.params.number }, {available: true}).then(() => {
+            res.json({ message: "Room enable success" })
+        }).catch(() => {
+            res.json({ message: "Room enable fail" })
+        });
+    } else res.json({ message: "not permission" });
+}
