@@ -18,3 +18,11 @@ export function save(req, res){
         });
     }else res.json({ message: "not permission" });
 }
+
+export function getAll(req, res){
+    Room.find().then((result) => {
+        res.json(result)
+    }).catch(() => {
+        res.json("Server Error")
+    });
+}

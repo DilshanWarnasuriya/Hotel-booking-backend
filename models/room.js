@@ -22,10 +22,6 @@ const roomSchema = mongoose.Schema({
         type: String,
         default: ""
     },
-    specialNote:{
-        type: String,
-        default: ""
-    },
     available:{
         type: Boolean,
         default: true

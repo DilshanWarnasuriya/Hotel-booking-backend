@@ -1,8 +1,10 @@
 import express from 'express'
-import { save } from '../controllers/roomController.js';
+import { getAll, save } from '../controllers/roomController.js';
 
 const roomRouter = express.Router();
 
-roomRouter.post("/", save)
+roomRouter.post("/", save);
+
+roomRouter.get("/", getAll);
 
 export default roomRouter;
