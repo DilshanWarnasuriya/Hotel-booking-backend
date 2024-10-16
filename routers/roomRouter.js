@@ -1,5 +1,5 @@
 import express from 'express'
-import { disable, enable, findByNumber, getAll, remove, save, update } from '../controllers/roomController.js';
+import { disable, enable, findByCategory, findByNumber, getAll, remove, save, update } from '../controllers/roomController.js';
 
 const roomRouter = express.Router();
 
@@ -8,6 +8,8 @@ roomRouter.post("/", save);
 roomRouter.get("/", getAll);
 
 roomRouter.get("/number/:number", findByNumber);
+
+roomRouter.get("/category/:category", findByCategory);
 
 roomRouter.delete("/:number", remove);
 

@@ -43,6 +43,22 @@ export function findByNumber(req, res) {
     });
 }
 
+export function findByCategory(req, res) {
+    Room.findOne({ category: req.params.category }).then((room) => {
+        if (room) {
+            res.json({
+                message: "room found",
+                room: room
+            })
+        }
+        else {
+            res.json({ message: "room not found" })
+        }
+    }).catch((err) => {
+        res.json({ message: "Server error" })
+    });
+}
+
 export function remove(req, res) {
     if (isAdmin(req)) {
         Room.deleteOne({ number: req.params.number }).then(() => {
