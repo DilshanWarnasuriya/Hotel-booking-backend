@@ -1,5 +1,5 @@
 import express from "express";
-import { disable, enable, findByPhoneNo, getAll, login, save, update } from "../controllers/userController.js";
+import { disable, enable, findByEmail, findByPhoneNo, getAll, login, save, update } from "../controllers/userController.js";
 
 const userRouter = express.Router();
 
@@ -9,7 +9,9 @@ userRouter.post("/login", login);
 
 userRouter.get("/", getAll);
 
-userRouter.get("/phoneNo/:phoneNo", findByPhoneNo)
+userRouter.get("/phoneNo/:phoneNo", findByPhoneNo);
+
+userRouter.get("/email/:email", findByEmail);
 
 userRouter.put("/", update);
 
