@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const reviewSchema = mongoose.Schema({
+    id: {
+        type: Number,
+        required: true
+    },
     email: {
         type: String,
         required: true
@@ -18,6 +22,10 @@ const reviewSchema = mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    disabled: {
+        type: Boolean,
+        default: true
     }
 });
 
