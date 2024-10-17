@@ -1,5 +1,5 @@
 import Review from "../models/review.js";
-import { isAdmin, isUser } from "./userController.js";
+import { isAdmin, isHaveUser, isUser } from "./userController.js";
 
 export async function save(req, res) {
     if (isUser(req)) {
@@ -25,6 +25,16 @@ export function getAll(req, res) {
             res.json(result);
         }).catch(() => {
             res.json({ message: "Server error" });
+        });
+    } else res.json({ message: "not permission" });
+}
+
+export function remove(req, res) {
+    if (isHaveUser(req)) {
+        Review.deleteOne({ id: req.params.id }).then(() => {
+            res.json({ message: "Review delete success" });
+        }).catch(() => {
+            res.json({ message: "Review delete fail" });
         });
     } else res.json({ message: "not permission" });
 }
