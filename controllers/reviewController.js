@@ -69,3 +69,13 @@ export function disable(req, res) {
         });
     } else res.json({ message: "not permission" });
 }
+
+export function enable(req, res) {
+    if (isAdmin(req)) {
+        Review.updateOne({ id: req.params.id }, { disabled: false }).then(() => {
+            res.json({ message: "Review enable success" })
+        }).catch(() => {
+            res.json({ message: "Review enable fail" });
+        });
+    } else res.json({ message: "not permission" });
+}
