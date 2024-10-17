@@ -1,5 +1,5 @@
 import express from "express";
-import { disable, enable, getAll, login, save, update } from "../controllers/userController.js";
+import { disable, enable, findByPhoneNo, getAll, login, save, update } from "../controllers/userController.js";
 
 const userRouter = express.Router();
 
@@ -7,12 +7,14 @@ userRouter.post("/", save);
 
 userRouter.post("/login", login);
 
-userRouter.get("/", getAll)
+userRouter.get("/", getAll);
 
-userRouter.put("/", update)
+userRouter.get("/phoneNo/:phoneNo", findByPhoneNo)
 
-userRouter.put("/disable/:email", disable)
+userRouter.put("/", update);
 
-userRouter.put("/enable/:email", enable)
+userRouter.put("/disable/:email", disable);
+
+userRouter.put("/enable/:email", enable);
 
 export default userRouter;

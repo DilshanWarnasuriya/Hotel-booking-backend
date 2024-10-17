@@ -61,6 +61,16 @@ export function getAll(req, res) {
     else res.json({ message: "not permission" });
 }
 
+export function findByPhoneNo(req, res) {
+    if (isAdmin(req)) {
+        User.findOne({ phoneNo: req.params.phoneNo }).then((user) => {
+            res.json(user)
+        }).catch((err) => {
+            res.json({ message: "Server error" });
+        });
+    } else res.json({ message: "not permission" });
+}
+
 export function update(req, res) {
     if (isHaveUser(req)) {
         User.updateOne({ email: req.body.email }, req.body).then((result) => {
@@ -93,6 +103,7 @@ export function enable(req, res) {
         });
     }
 }
+
 
 // Check user hear
 export function isHaveUser(req) {
