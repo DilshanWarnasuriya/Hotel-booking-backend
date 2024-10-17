@@ -1,5 +1,5 @@
 import Review from "../models/review.js";
-import { isUser } from "./userController.js";
+import { isAdmin, isUser } from "./userController.js";
 
 export async function save(req, res) {
     if (isUser(req)) {
@@ -15,6 +15,16 @@ export async function save(req, res) {
                 message: "Review added fail",
                 error: err
             })
+        });
+    } else res.json({ message: "not permission" });
+}
+
+export function getAll(req, res) {
+    if (isAdmin(req)) {
+        Review.find().then((result) => {
+            res.json(result);
+        }).catch(() => {
+            res.json({ message: "Server error" });
         });
     } else res.json({ message: "not permission" });
 }
