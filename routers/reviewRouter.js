@@ -1,11 +1,13 @@
 import express from 'express'
-import { getAll, remove, save } from '../controllers/reviewController.js';
+import { findByEmail, getAll, remove, save } from '../controllers/reviewController.js';
 
 const reviewRouter = express.Router();
 
 reviewRouter.post("/", save);
 
 reviewRouter.get("/", getAll);
+
+reviewRouter.get("/:email", findByEmail);
 
 reviewRouter.delete("/:id", remove);
 

@@ -4,6 +4,7 @@ import { isAdmin, isHaveUser, isUser } from "./userController.js";
 export async function save(req, res) {
     if (isUser(req)) {
         req.body.id = await Review.countDocuments() + 1; // Generate new id
+        req.body.email = req.user.email;
         const newReview = new Review(req.body);
         newReview.save().then((review) => {
             res.json({
@@ -22,6 +23,16 @@ export async function save(req, res) {
 export function getAll(req, res) {
     if (isAdmin(req)) {
         Review.find().then((result) => {
+            res.json(result);
+        }).catch(() => {
+            res.json({ message: "Server error" });
+        });
+    } else res.json({ message: "not permission" });
+}
+
+export function findByEmail(req, res) {
+    if (isUser(req)) {
+        Review.find({email: req.params.email}).then((result) => {
             res.json(result);
         }).catch(() => {
             res.json({ message: "Server error" });
