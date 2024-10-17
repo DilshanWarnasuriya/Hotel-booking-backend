@@ -53,9 +53,19 @@ export function remove(req, res) {
 export function update(req, res) {
     if (isUser(req)) {
         Review.updateOne({ id: req.params.id }, req.body).then(() => {
-            res.json({ message: "Review update success"})
+            res.json({ message: "Review update success" })
         }).catch(() => {
             res.json({ message: "Review update fail" });
+        });
+    } else res.json({ message: "not permission" });
+}
+
+export function disable(req, res) {
+    if (isAdmin(req)) {
+        Review.updateOne({ id: req.params.id }, { disabled: true }).then(() => {
+            res.json({ message: "Review disable success" })
+        }).catch(() => {
+            res.json({ message: "Review disable fail" });
         });
     } else res.json({ message: "not permission" });
 }

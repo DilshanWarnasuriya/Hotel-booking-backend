@@ -1,5 +1,5 @@
 import express from 'express'
-import { findByEmail, getAll, remove, save, update } from '../controllers/reviewController.js';
+import { disable, findByEmail, getAll, remove, save, update } from '../controllers/reviewController.js';
 
 const reviewRouter = express.Router();
 
@@ -12,5 +12,7 @@ reviewRouter.get("/:email", findByEmail);
 reviewRouter.delete("/:id", remove);
 
 reviewRouter.put("/:id", update);
+
+reviewRouter.put("/disable/:id", disable);
 
 export default reviewRouter;
