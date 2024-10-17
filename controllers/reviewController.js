@@ -32,7 +32,7 @@ export function getAll(req, res) {
 
 export function findByEmail(req, res) {
     if (isUser(req)) {
-        Review.find({email: req.params.email}).then((result) => {
+        Review.find({ email: req.params.email }).then((result) => {
             res.json(result);
         }).catch(() => {
             res.json({ message: "Server error" });
@@ -46,6 +46,16 @@ export function remove(req, res) {
             res.json({ message: "Review delete success" });
         }).catch(() => {
             res.json({ message: "Review delete fail" });
+        });
+    } else res.json({ message: "not permission" });
+}
+
+export function update(req, res) {
+    if (isUser(req)) {
+        Review.updateOne({ id: req.params.id }, req.body).then(() => {
+            res.json({ message: "Review update success"})
+        }).catch(() => {
+            res.json({ message: "Review update fail" });
         });
     } else res.json({ message: "not permission" });
 }
