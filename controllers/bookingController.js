@@ -37,6 +37,16 @@ export async function create(req, res) {
     } else res.json({ message: "not permission" });
 }
 
+export function getAll(req, res) {
+    Booking.find().then((result) => {
+        res.json(result)
+    }).catch(() => {
+        res.json({ message: "Server error" })
+    });
+}
+
+
+
 function compareDates(date1, date2) {
     const d1 = new Date(date1);
     const d2 = new Date(date2);
