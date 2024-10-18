@@ -47,6 +47,16 @@ export function getAll(req, res) {
     } else res.json({ message: "not permission" });
 }
 
+export function findById(req, res){
+    if (isAdmin(req)) {
+        Booking.find({ id: req.params.id }).then((result) => {
+            res.json(result)
+        }).catch(() => {
+            res.json({ message: "Server error" })
+        });
+    } else res.json({ message: "not permission" });
+}
+
 export function cancel(req, res) {
     if (isHaveUser(req)) {
         Booking.updateOne({ id: req.params.id }, { status: "cancel" }).then(() => {
