@@ -8,6 +8,7 @@ import eventRouter from "./routers/eventRouter.js";
 import categoryRouter from "./routers/categoryRouter.js";
 import roomRouter from "./routers/roomRouter.js";
 import reviewRouter from "./routers/reviewRouter.js";
+import bookingRouter from "./routers/bookingRouter.js";
 
 const app = express();
 dotenv.config();
@@ -36,6 +37,7 @@ app.use("/api/event", eventRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/room", roomRouter);
 app.use("/api/review", reviewRouter);
+app.use("/api/booking", bookingRouter);
 
 app.listen(5000, (req, res) => {
     console.log("Application start in port 5000");
