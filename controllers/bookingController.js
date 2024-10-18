@@ -1,6 +1,6 @@
 import Booking from "../models/booking.js";
 import Room from "../models/room.js";
-import { isAdmin, isUser } from "./userController.js";
+import { isAdmin, isHaveUser, isUser } from "./userController.js";
 
 export async function create(req, res) {
     if (isUser(req)) {
@@ -48,7 +48,7 @@ export function getAll(req, res) {
 }
 
 export function cancel(req, res) {
-    if (isUser(req)) {
+    if (isHaveUser(req)) {
         Booking.updateOne({ id: req.params.id }, { status: "cancel" }).then(() => {
             res.json({ message: "Booking cancel success" })
         }).catch(() => {
@@ -56,6 +56,17 @@ export function cancel(req, res) {
         });
     } else res.json({ message: "not permission" });
 }
+
+export function confirm(req, res) {
+    if (isHaveUser(req)) {
+        Booking.updateOne({ id: req.params.id }, { status: "confirmed" }).then(() => {
+            res.json({ message: "Booking confirm success" })
+        }).catch(() => {
+            res.json({ message: "Booking confirm fail" })
+        });
+    } else res.json({ message: "not permission" });
+}
+
 
 function compareDates(date1, date2) {
     const d1 = new Date(date1);
