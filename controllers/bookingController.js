@@ -4,12 +4,15 @@ import { isAdmin, isHaveUser, isUser } from "./userController.js";
 
 export async function create(req, res) {
     if (isUser(req)) {
-        if (compareDates(req.body.endDate, req.body.startDate)) { // Check new booking has end date after the start date
+        const startDate = new Date(req.body.startDate) ;
+        const endDate = new Date(req.body.endDate);
+        
+        if (startDate.getTime() < endDate.getTime() && startDate.getTime() > Date.now()) { 
 
-            const lastBooking = await Booking.findOne({ roomNo: req.body.roomNo }).sort({ endDate: -1 }).limit(1); // Get last booking of the using room id
+            const lastBooking = await Booking.findOne({ roomNo: req.body.roomNo }).sort({ endDate: -1 }).limit(1); 
             const room = await Room.findOne({ number: req.body.roomNo });
 
-            if (lastBooking && compareDates(lastBooking.endDate, req.body.startDate) && lastBooking.status != "cancel") { // Check room is booked before and if the new booking start date is before the last booking end date.
+            if (lastBooking && lastBooking.status != "cancel" && !compareDates(req.body.startDate, req.body.endDate, lastBooking.startDate, lastBooking.endDate)) { 
                 res.json({ message: "Sorry!. Can't book this room right now" })
             }
             else if (req.body.personCount > room.maxPerson) {
@@ -88,10 +91,13 @@ export function confirm(req, res) {
 }
 
 
-function compareDates(date1, date2) {
-    const d1 = new Date(date1);
-    const d2 = new Date(date2);
-    if (d1.getTime() > d2.getTime()) {
+function compareDates(date1, date2, date3, date4) {
+    const newStartDate = new Date(date1);
+    const newEndDate = new Date(date2);
+    const bookedStartDate = new Date(date3);
+    const bookedEndDate = new Date(date4);
+
+    if (newEndDate.getTime() < bookedStartDate.getTime() || newStartDate.getTime() > bookedEndDate.getTime()) {
         return true;
     }
     return false;
