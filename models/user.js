@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
 const userSchema = mongoose.Schema({
-    email: {
-        type: String,
+    id: {
+        type: Number,
         required: true,
         unique: true
     },
-    password: {
+    title: {
         type: String,
         required: true
     },
@@ -18,23 +18,27 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    gender: {
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    contactNo: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    password: {
         type: String,
         required: true
     },
-    whatsappNo: {
-        type: Number,
-        required: true,
-        unique: true
-    },
-    phoneNo: {
-        type: Number,
-        required: true,
-        unique: true
-    },
     image: {
         type: String,
-        default: "https://img.icons8.com/forma-thin-filled/96/guest-male.png"
+    },
+    type: {
+        type: String,
+        required: true,
+        default: "user"
     },
     disabled: {
         type: Boolean,
@@ -43,11 +47,6 @@ const userSchema = mongoose.Schema({
     emailVerified: {
         type: Boolean,
         default: false
-    },
-    type: {
-        type: String,
-        required: true,
-        default: "user"
     }
 })
 
