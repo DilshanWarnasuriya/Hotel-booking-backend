@@ -51,28 +51,48 @@ export function persist(req, res) {
 }
 
 export function login(req, res) {
-    User.findOne({ email: req.body.email }).then((user) => {
-        if (user || !user.disabled) {
-            if (passwordHash.verify(req.body.password, user.password)) { // check password
-                const payload = {
-                    email: user.email,
-                    password: user.password,
-                    type: user.type
-                }
-                const token = jwt.sign(payload, process.env.JWT_KEY) // generate token
-                res.json({
-                    message: "Login success",
-                    token: token
-                })
-            }
-            else res.json({ message: "Password is wrong" });
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const passwordRegex = /^.{8,}$/
+    const contactNoRegex = /^0\d{9}$/;
+
+    if (!emailRegex.test(req.body.emailOrContactNo) && !contactNoRegex.test(req.body.emailOrContactNo)) {
+        return res.status(400).json({ message: "Please enter valid email or contact no." })
+    }
+    if (!passwordRegex.test(req.body.password)) {
+        return res.status(400).json({ message: "Please enter valid password" })
+    }
+
+    User.findOne({ // find user from email or contact number
+        $or: [
+            { email: req.body.emailOrContactNo },
+            { contactNo: req.body.emailOrContactNo }
+        ]
+    }).then((user) => {
+        if (!user || user.disabled) {
+            return res.status(400).json({ message: "User not found" });
         }
-        else res.json({ message: "User not found" });
-    }).catch((err) => {
-        res.json({
-            message: "Logging fail",
-            error: err
+        else if (!passwordHash.verify(req.body.password, user.password)) { // check password
+            return res.status(400).json({ message: "Password is incorrect" });
+        }
+
+        const payload = {
+            id: user.id,
+            name: user.title + ". " + user.firstName + " " + user.lastName,
+            type: user.type,
+            image: user.image,
+            email: user.email
+        }
+
+        const token = jwt.sign(payload, process.env.JWT_KEY) // Generate Token
+
+        res.status(200).json({
+            message: "Login success",
+            userType: user.type, // for identify authorized users
+            token: token
         })
+
+    }).catch((err) => {
+        res.status(500).json({ message: "Server error occurred", error: err.message });
     })
 }
 
