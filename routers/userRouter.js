@@ -1,9 +1,9 @@
 import express from "express";
-import { disable, enable, findByEmail, findByPhoneNo, retrieve, login, save, update } from "../Controllers/userController.js";
+import { disable, enable, findByEmail, findByPhoneNo, retrieve, login, persist, update } from "../Controllers/userController.js";
 
 const userRouter = express.Router();
 
-userRouter.post("/", save);
+userRouter.post("/", persist);
 
 userRouter.post("/login", login);
 
