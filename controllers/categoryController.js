@@ -1,4 +1,4 @@
-import Category from "../models/category.js";
+import Category from "../Models/category.js";
 import { isAdmin } from "./userController.js";
 
 export function save(req, res) {

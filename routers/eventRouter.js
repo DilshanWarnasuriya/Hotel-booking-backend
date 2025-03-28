@@ -1,5 +1,5 @@
 import express from 'express'
-import { disable, enable, getAll, remove, save, update } from '../controllers/eventController.js';
+import { disable, enable, getAll, remove, save, update } from '../Controllers/eventController.js';
 
 const eventRouter = express.Router();
 

@@ -1,5 +1,5 @@
 import express from 'express'
-import { disable, enable, findByCategory, findByNumber, getAll, remove, save, update } from '../controllers/roomController.js';
+import { disable, enable, findByCategory, findByNumber, getAll, remove, save, update } from '../Controllers/roomController.js';
 
 const roomRouter = express.Router();
 

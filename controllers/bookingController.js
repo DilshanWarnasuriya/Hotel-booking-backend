@@ -1,5 +1,5 @@
-import Booking from "../models/booking.js";
-import Room from "../models/room.js";
+import Booking from "../Models/booking.js";
+import Room from "../Models/room.js";
 import { isAdmin, isHaveUser, isUser } from "./userController.js";
 
 export async function create(req, res) {

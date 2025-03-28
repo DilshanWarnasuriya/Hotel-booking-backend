@@ -1,5 +1,5 @@
 import passwordHash from 'password-hash'
-import User from "../models/user.js";
+import User from "../Models/user.js";
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
 

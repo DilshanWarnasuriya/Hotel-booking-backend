@@ -1,4 +1,4 @@
-import Review from "../models/review.js";
+import Review from "../Models/review.js";
 import { isAdmin, isHaveUser, isUser } from "./userController.js";
 
 export async function save(req, res) {

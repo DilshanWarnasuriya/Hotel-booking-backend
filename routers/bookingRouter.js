@@ -1,5 +1,5 @@
 import express from 'express'
-import { cancel, confirm, create, findByEmail, findById, getAll } from '../controllers/bookingController.js';
+import { cancel, confirm, create, findByEmail, findById, getAll } from '../Controllers/bookingController.js';
 
 const bookingRouter = express.Router();
 

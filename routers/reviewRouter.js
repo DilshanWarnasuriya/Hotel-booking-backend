@@ -1,5 +1,5 @@
 import express from 'express'
-import { disable, enable, findByEmail, getAll, remove, save, update } from '../controllers/reviewController.js';
+import { disable, enable, findByEmail, getAll, remove, save, update } from '../Controllers/reviewController.js';
 
 const reviewRouter = express.Router();
 

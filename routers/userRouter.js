@@ -1,5 +1,5 @@
 import express from "express";
-import { disable, enable, findByEmail, findByPhoneNo, getAll, login, save, update } from "../controllers/userController.js";
+import { disable, enable, findByEmail, findByPhoneNo, getAll, login, save, update } from "../Controllers/userController.js";
 
 const userRouter = express.Router();
 

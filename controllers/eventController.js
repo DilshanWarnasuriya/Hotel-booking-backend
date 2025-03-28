@@ -1,4 +1,4 @@
-import Event from "../models/event.js";
+import Event from "../Models/event.js";
 import { isAdmin } from "./userController.js";
 
 export function save(req, res) {

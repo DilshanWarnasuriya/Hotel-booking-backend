@@ -1,4 +1,4 @@
-import Room from "../models/room.js";
+import Room from "../Models/room.js";
 import { isAdmin } from "./userController.js";
 
 
