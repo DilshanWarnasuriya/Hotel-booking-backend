@@ -1,5 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
+import cors from "cors"
 import dotenv from 'dotenv'
 import mongoose from "mongoose";
 import userRouter from "./Routers/userRouter.js";
@@ -8,6 +9,7 @@ import categoryRouter from "./Routers/categoryRouter.js";
 import roomRouter from "./Routers/roomRouter.js";
 import reviewRouter from "./Routers/reviewRouter.js";
 import bookingRouter from "./Routers/bookingRouter.js";
+import authenticate from "./Middleware/authentication.js";
 
 const app = express();
 

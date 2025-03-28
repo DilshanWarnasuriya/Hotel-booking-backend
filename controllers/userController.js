@@ -47,18 +47,47 @@ export function login(req, res) {
     })
 }
 
-export function getAll(req, res) {
-    if (isAdmin(req)) {
-        User.find().then((result) => {
-            res.json(result);
-        }).catch((err) => {
-            res.json({
-                message: "Server error",
-                error: err
-            });
-        });
+export function retrieve(req, res) {
+    if (!isAdmin(req)) {
+        return res.status(401).json({ message: "Admin access required" });
     }
-    else res.json({ message: "not permission" });
+    const type = req.query.type; // filtering option
+    const pageNumber = req.query.pageNo; // page number
+    const recordCount = req.query.recordCount; // one page record count
+    const skipRecord = (pageNumber - 1) * recordCount; // number of records to skip
+
+    if (type == "Disable") { // disabled filter option
+        User.find({ disabled: true }).sort({ id: -1 }).skip(skipRecord).limit(recordCount)
+            .then((users) => {
+                User.countDocuments({ disabled: true })
+                    .then((totalRecord) => {
+                        res.status(200).json({
+                            message: "Users found",
+                            users: users,
+                            totalPage: Math.ceil(totalRecord / recordCount)
+                        });
+                    })
+            })
+            .catch((err) => {
+                res.status(500).json({ message: "Server error occurred", error: err.message });
+            });
+    }
+    else { // admin and user(customer) filter option
+        User.find({ type: type, disabled: false }).sort({ id: -1 }).skip(skipRecord).limit(recordCount)
+            .then((users) => {
+                User.countDocuments({ type: type, disabled: false })
+                    .then((totalRecord) => {
+                        res.status(200).json({
+                            message: "Users found",
+                            users: users,
+                            totalPage: Math.ceil(totalRecord / recordCount)
+                        });
+                    })
+            })
+            .catch((err) => {
+                res.status(500).json({ message: "Server error occurred", error: err.message });
+            });
+    }
 }
 
 export function findByPhoneNo(req, res) {
