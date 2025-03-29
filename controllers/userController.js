@@ -1,9 +1,6 @@
 import passwordHash from 'password-hash'
 import User from "../Models/user.js";
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv'
-
-dotenv.config();
 
 export function persist(req, res) {
 
@@ -139,24 +136,28 @@ export function retrieve(req, res) {
     }
 }
 
-export function findByPhoneNo(req, res) {
-    if (isAdmin(req)) {
-        User.findOne({ phoneNo: req.params.phoneNo }).then((user) => {
-            res.json(user)
-        }).catch((err) => {
-            res.json({ message: "Server error" });
-        });
-    } else res.json({ message: "not permission" });
-}
+export function findByContactNo(req, res) {
+    if (!isHaveUser(req)) {
+        return res.status(401).json({ message: "Registered user access required" });
+    }
 
-export function findByEmail(req, res) {
-    if (isAdmin(req)) {
-        User.findOne({ email: req.params.email }).then((user) => {
-            res.json(user)
-        }).catch((err) => {
-            res.json({ message: "Server error" });
+    User.findOne({ contactNo: req.params.contactNo })
+        .then((user) => {
+            if (!user) {
+                return res.status(400).json({
+                    message: "User not found"
+                });
+            }
+
+            delete user.password // password not retrieve
+            res.json({
+                message: "User found",
+                user: user
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
         });
-    } else res.json({ message: "not permission" });
 }
 
 export function update(req, res) {
@@ -168,26 +169,6 @@ export function update(req, res) {
                 message: "User update fail",
                 user: err
             })
-        });
-    }
-}
-
-export function disable(req, res) {
-    if (isAdmin(req)) {
-        User.updateOne({ email: req.params.email }, { disabled: true }).then((result) => {
-            res.json({ message: "User disable success" })
-        }).catch((err) => {
-            res.json({ message: "User disable fail" })
-        });
-    }
-}
-
-export function enable(req, res) {
-    if (isAdmin(req)) {
-        User.updateOne({ email: req.params.email }, { disabled: false }).then((result) => {
-            res.json({ message: "User enable success" })
-        }).catch((err) => {
-            res.json({ message: "User enable fail" })
         });
     }
 }
