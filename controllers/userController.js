@@ -149,7 +149,7 @@ export function findByContactNo(req, res) {
                 });
             }
 
-            delete user.password // password not retrieve
+            user.password = "" // password not retrieve
             res.json({
                 message: "User found",
                 user: user
@@ -161,16 +161,44 @@ export function findByContactNo(req, res) {
 }
 
 export function update(req, res) {
-    if (isHaveUser(req)) {
-        User.updateOne({ email: req.body.email }, req.body).then((result) => {
-            res.json({ message: "User update success" })
-        }).catch((err) => {
-            res.json({
-                message: "User update fail",
-                user: err
-            })
-        });
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const contactNoRegex = /^0\d{9}$/;
+
+    if (!isHaveUser(req)) {
+        return res.status(401).json({ message: "Registered user access required" });
     }
+    if (!emailRegex.test(req.body.email)) {
+        return res.status(400).json({ message: "Please enter valid email address" })
+    }
+    if (!contactNoRegex.test(req.body.contactNo)) {
+        return res.status(400).json({ message: "Please enter valid contact number" })
+    }
+    
+    if (!req.body.password) { 
+        delete req.body.password; // Remove password field if empty
+    } else {
+        req.body.password = passwordHash.generate(req.body.password); // Hash the new password
+    }
+
+    // update user data
+    User.updateOne({ id: req.body.id }, req.body)
+        .then(() => {
+            res.status(200).json({ message: "User Update Successful" });
+        })
+        .catch((err) => {
+            const errorMessage = err.message;
+            if (errorMessage.includes("email_1")) {
+                res.status(409).json({ message: "Email is already used" })
+            }
+            else if (errorMessage.includes("contactNo_1")) {
+                res.status(409).json({ message: "Contact No is already used" })
+            }
+            else {
+                res.status(500).json({ message: "Server error occurred", error: errorMessage });
+            }
+
+        })
 }
 
 
