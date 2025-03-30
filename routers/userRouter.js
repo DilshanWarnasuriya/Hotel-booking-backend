@@ -1,5 +1,5 @@
 import express from "express";
-import { findByContactNo, login, persist, retrieve, update } from "../controllers/userController.js";
+import { findByContactNo, findById, login, persist, retrieve, update } from "../controllers/userController.js";
 
 const userRouter = express.Router();
 
@@ -10,6 +10,8 @@ userRouter.post("/login", login);
 userRouter.get("/", retrieve);
 
 userRouter.get("/contactNo/:contactNo", findByContactNo);
+
+userRouter.get("/id/:id", findById);
 
 userRouter.put("/", update);
 

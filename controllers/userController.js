@@ -160,6 +160,30 @@ export function findByContactNo(req, res) {
         });
 }
 
+export function findById(req, res) {
+    if (!isHaveUser(req)) {
+        return res.status(401).json({ message: "Registered user access required" });
+    }
+
+    User.findOne({ id: req.params.id })
+        .then((user) => {
+            if (!user) {
+                return res.status(400).json({
+                    message: "User not found"
+                });
+            }
+
+            user.password = "" // password not retrieve
+            res.json({
+                message: "User found",
+                user: user
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
+        });
+}
+
 export function update(req, res) {
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
