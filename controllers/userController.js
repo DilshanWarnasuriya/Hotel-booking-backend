@@ -198,8 +198,8 @@ export function update(req, res) {
     if (!contactNoRegex.test(req.body.contactNo)) {
         return res.status(400).json({ message: "Please enter valid contact number" })
     }
-    
-    if (!req.body.password) { 
+
+    if (!req.body.password) {
         delete req.body.password; // Remove password field if empty
     } else {
         req.body.password = passwordHash.generate(req.body.password); // Hash the new password
@@ -222,6 +222,19 @@ export function update(req, res) {
                 res.status(500).json({ message: "Server error occurred", error: errorMessage });
             }
 
+        })
+}
+
+export function remove(req, res) {
+    if (!isAdmin(req)) {
+        return res.status(401).json({ message: "Admin access required" });
+    }
+
+    User.deleteOne({ id: req.params.id })
+        .then(() => {
+            res.status(200).json({ message: "User Delete Successful" });
+        }).catch((err) => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
         })
 }
 
