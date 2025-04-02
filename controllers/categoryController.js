@@ -18,12 +18,13 @@ export function save(req, res) {
     } else res.json({ message: "not permission" });
 }
 
-export function getAll(req, res) {
-    Category.find().then((result) => {
-        res.json(result);
-    }).catch((err) => {
-        res.json({ message: "Server error" });
-    });
+export function retrieve(req, res) {
+    Category.find().sort({ id: -1 })
+        .then((categories) => {
+            res.status(200).json(categories);
+        }).catch((err) => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
+        })
 }
 
 export function remove(req, res) {
