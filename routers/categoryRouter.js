@@ -1,9 +1,9 @@
 import express from 'express'
-import { remove, retrieve, save, update } from '../Controllers/categoryController.js';
+import { persist, remove, retrieve, update } from '../Controllers/categoryController.js';
 
 const categoryRouter = express.Router();
 
-categoryRouter.post("/", save);
+categoryRouter.post("/", persist);
 
 categoryRouter.get("/", retrieve);
 

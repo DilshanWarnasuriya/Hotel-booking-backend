@@ -22,10 +22,10 @@ const categorySchema = mongoose.Schema({
     features: [{
         type: String
     }],
-    image: {
+    images: [{
         type: String,
         required: true
-    }
+    }]
 })
 
 export default mongoose.model("category", categorySchema);
