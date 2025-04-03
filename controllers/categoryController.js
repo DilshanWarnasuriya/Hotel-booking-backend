@@ -42,6 +42,21 @@ export function retrieve(req, res) {
         })
 }
 
+export function findById(req, res) {
+    Category.findOne({ id: req.params.id })
+        .then((category) => {
+            if (!category) {
+                return res.status(404).json({ message: "Category Not found" });
+            }
+            res.status(200).json({
+                message: "Category found",
+                category: category
+            });
+        }).catch((err) => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
+        });
+}
+
 export function remove(req, res) {
     if (isAdmin(req)) {
         Category.deleteOne({ name: req.params.name }).then(() => {
