@@ -11,6 +11,6 @@ categoryRouter.get("/id/:id", findById);
 
 categoryRouter.delete("/:name", remove);
 
-categoryRouter.put("/:name", update);
+categoryRouter.put("/", update);
 
 export default categoryRouter;
