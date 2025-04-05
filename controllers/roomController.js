@@ -83,23 +83,31 @@ export function findByNumber(req, res) {
         })
 }
 
-export function remove(req, res) {
-    if (isAdmin(req)) {
-        Room.deleteOne({ number: req.params.number }).then(() => {
-            res.json({ message: "Room delete success" })
-        }).catch(() => {
-            res.json({ message: "Room delete fail" })
-        });
-    } else res.json({ message: "not permission" });
+export function update(req, res) {
+    if (!isAdmin(req)) {
+        return res.status(401).json({ message: "Admin access required" });
+    }
+
+    Room.updateOne({ number: req.body.number }, req.body)
+        .then(() => {
+            res.status(200).json({ message: "Room Update Successful" });
+        })
+        .catch(() => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
+        })
 }
 
-export function update(req, res) {
-    if (isAdmin(req)) {
-        Room.updateOne({ number: req.params.number }, req.body).then(() => {
-            res.json({ message: "Room update success" })
-        }).catch(() => {
-            res.json({ message: "Room update fail" })
-        });
-    } else res.json({ message: "not permission" });
+export function remove(req, res) {
+    if (!isAdmin(req)) {
+        return res.status(401).json({ message: "Admin access required" });
+    }
+
+    Room.deleteOne({ number: req.params.number })
+        .then(() => {
+            res.status(200).json({ message: "Room Delete Successful" });
+        })
+        .catch(() => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
+        })
 }
 

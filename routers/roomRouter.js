@@ -9,8 +9,8 @@ roomRouter.get("/", retrieve);
 
 roomRouter.get("/number/:number", findByNumber);
 
-roomRouter.delete("/:number", remove);
+roomRouter.put("/", update);
 
-roomRouter.put("/:number", update);
+roomRouter.delete("/:number", remove);
 
 export default roomRouter;
