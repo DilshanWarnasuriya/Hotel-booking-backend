@@ -34,7 +34,7 @@ export function retrieve(req, res) {
     const skipRecord = (pageNumber - 1) * recordCount; // number of records to skip
 
     if (type == "All") { // All filter option
-        Room.find().sort({number: 1}).skip(skipRecord).limit(recordCount)
+        Room.find().sort({ number: 1 }).skip(skipRecord).limit(recordCount)
             .then((rooms) => {
                 Room.countDocuments()
                     .then((totalRecord) => {
@@ -68,35 +68,19 @@ export function retrieve(req, res) {
 }
 
 export function findByNumber(req, res) {
-    Room.findOne({ number: req.params.number }).then((room) => {
-        if (room) {
-            res.json({
-                message: "room found",
+    Room.findOne({ number: req.params.number })
+        .then((room) => {
+            if (!room) {
+                return res.status(404).json({ message: "Room Not found" });
+            }
+            res.status(200).json({
+                message: "Room found",
                 room: room
-            })
-        }
-        else {
-            res.json({ message: "room not found" })
-        }
-    }).catch((err) => {
-        res.json({ message: "Server error" })
-    });
-}
-
-export function findByCategory(req, res) {
-    Room.findOne({ category: req.params.category }).then((room) => {
-        if (room) {
-            res.json({
-                message: "room found",
-                room: room
-            })
-        }
-        else {
-            res.json({ message: "room not found" })
-        }
-    }).catch((err) => {
-        res.json({ message: "Server error" })
-    });
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
+        })
 }
 
 export function remove(req, res) {
