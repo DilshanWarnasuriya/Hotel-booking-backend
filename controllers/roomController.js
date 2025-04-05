@@ -2,21 +2,28 @@ import Room from "../Models/room.js";
 import { isAdmin } from "./userController.js";
 
 
-export function save(req, res) {
-    if (isAdmin(req)) {
-        const newRoom = new Room(req.body);
-        newRoom.save().then((room) => {
-            res.json({
-                message: "Room added success",
+export function persist(req, res) {
+    if (!isAdmin(req)) {
+        return res.status(401).json({ message: "Admin access required" });
+    }
+
+    const newRoom = new Room(req.body);
+    newRoom.save()
+        .then((room) => {
+            res.status(201).json({
+                message: "Room added successful",
                 room: room
             })
-        }).catch((err) => {
-            res.json({
-                message: "Room added fail",
-                error: err
-            })
-        });
-    } else res.json({ message: "not permission" });
+        })
+        .catch((err) => {
+            if (err.message.includes("number_1")) {
+                res.status(409).json({ message: "Room number is already used" })
+            }
+            else {
+                res.status(500).json({ message: "Server error occurred", error: err.message });
+            }
+
+        })
 }
 
 export function retrieve(req, res) {
@@ -27,7 +34,7 @@ export function retrieve(req, res) {
     const skipRecord = (pageNumber - 1) * recordCount; // number of records to skip
 
     if (type == "All") { // All filter option
-        Room.find().skip(skipRecord).limit(recordCount)
+        Room.find().sort({number: 1}).skip(skipRecord).limit(recordCount)
             .then((rooms) => {
                 Room.countDocuments()
                     .then((totalRecord) => {
