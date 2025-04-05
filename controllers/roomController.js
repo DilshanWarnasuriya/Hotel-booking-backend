@@ -19,12 +19,45 @@ export function save(req, res) {
     } else res.json({ message: "not permission" });
 }
 
-export function getAll(req, res) {
-    Room.find().then((result) => {
-        res.json(result)
-    }).catch(() => {
-        res.json({ message: "Server Error" });
-    });
+export function retrieve(req, res) {
+
+    const type = req.query.type; // filtering option
+    const pageNumber = req.query.pageNo; // page number
+    const recordCount = req.query.recordCount; // one page record count
+    const skipRecord = (pageNumber - 1) * recordCount; // number of records to skip
+
+    if (type == "All") { // All filter option
+        Room.find().skip(skipRecord).limit(recordCount)
+            .then((rooms) => {
+                Room.countDocuments()
+                    .then((totalRecord) => {
+                        res.status(200).json({
+                            message: "Rooms found",
+                            rooms: rooms,
+                            totalPage: Math.ceil(totalRecord / recordCount)
+                        });
+                    })
+            })
+            .catch((err) => {
+                res.status(500).json({ message: "Server error occurred", error: err.message });
+            });
+    }
+    else {
+        Room.find({ disabled: type == "Disable" ? true : false }).skip(skipRecord).limit(recordCount)
+            .then((rooms) => {
+                Room.countDocuments({ disabled: type == "Disable" ? true : false })
+                    .then((totalRecord) => {
+                        res.status(200).json({
+                            message: "Rooms found",
+                            rooms: rooms,
+                            totalPage: Math.ceil(totalRecord / recordCount)
+                        });
+                    })
+            })
+            .catch((err) => {
+                res.status(500).json({ message: "Server error occurred", error: err.message });
+            });
+    }
 }
 
 export function findByNumber(req, res) {
@@ -79,22 +112,3 @@ export function update(req, res) {
     } else res.json({ message: "not permission" });
 }
 
-export function disable(req, res) {
-    if (isAdmin(req)) {
-        Room.updateOne({ number: req.params.number }, { available: false }).then(() => {
-            res.json({ message: "Room disable success" })
-        }).catch(() => {
-            res.json({ message: "Room disable fail" })
-        });
-    } else res.json({ message: "not permission" });
-}
-
-export function enable(req, res) {
-    if (isAdmin(req)) {
-        Room.updateOne({ number: req.params.number }, { available: true }).then(() => {
-            res.json({ message: "Room enable success" })
-        }).catch(() => {
-            res.json({ message: "Room enable fail" })
-        });
-    } else res.json({ message: "not permission" });
-}

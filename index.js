@@ -4,7 +4,6 @@ import cors from "cors"
 import dotenv from 'dotenv'
 import mongoose from "mongoose";
 import userRouter from "./Routers/userRouter.js";
-import eventRouter from "./Routers/eventRouter.js";
 import categoryRouter from "./Routers/categoryRouter.js";
 import roomRouter from "./Routers/roomRouter.js";
 import reviewRouter from "./Routers/reviewRouter.js";
@@ -23,7 +22,6 @@ mongoose.connect(process.env.CONNECTION_STRING).then(() => console.log("Database
 
 //Routers
 app.use("/api/user", userRouter);
-app.use("/api/event", eventRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/room", roomRouter);
 app.use("/api/review", reviewRouter);
