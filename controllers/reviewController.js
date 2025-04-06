@@ -1,5 +1,5 @@
 import Review from "../Models/review.js";
-import { isAdmin, isHaveUser, isUser } from "./userController.js";
+import { isHaveUser, isUser } from "./userController.js";
 
 export async function save(req, res) {
     if (isUser(req)) {
@@ -20,14 +20,44 @@ export async function save(req, res) {
     } else res.json({ message: "not permission" });
 }
 
-export function getAll(req, res) {
-    if (isAdmin(req)) {
-        Review.find().then((result) => {
-            res.json(result);
-        }).catch(() => {
-            res.json({ message: "Server error" });
-        });
-    } else res.json({ message: "not permission" });
+export function retrieve(req, res) {
+    const type = req.query.type; // filtering option
+    const pageNumber = req.query.pageNo; // page number
+    const recordCount = req.query.recordCount; // one page record count
+    const skipRecord = (pageNumber - 1) * recordCount; // number of records to skip
+
+    if (type == "All") { // All filter option
+        Review.find().sort({ id: -1 }).skip(skipRecord).limit(recordCount)
+            .then((reviews) => {
+                Review.countDocuments()
+                    .then((totalRecord) => {
+                        res.status(200).json({
+                            message: "Rooms found",
+                            reviews: reviews,
+                            totalPage: Math.ceil(totalRecord / recordCount)
+                        });
+                    })
+            })
+            .catch((err) => {
+                res.status(500).json({ message: "Server error occurred", error: err.message });
+            });
+    }
+    else {
+        Review.find({ disabled: type == "Disable" ? true : false }).skip(skipRecord).limit(recordCount)
+            .then((reviews) => {
+                Review.countDocuments({ disabled: type == "Disable" ? true : false })
+                    .then((totalRecord) => {
+                        res.status(200).json({
+                            message: "Rooms found",
+                            reviews: reviews,
+                            totalPage: Math.ceil(totalRecord / recordCount)
+                        });
+                    })
+            })
+            .catch((err) => {
+                res.status(500).json({ message: "Server error occurred", error: err.message });
+            });
+    }
 }
 
 export function findByEmail(req, res) {
@@ -56,26 +86,6 @@ export function update(req, res) {
             res.json({ message: "Review update success" })
         }).catch(() => {
             res.json({ message: "Review update fail" });
-        });
-    } else res.json({ message: "not permission" });
-}
-
-export function disable(req, res) {
-    if (isAdmin(req)) {
-        Review.updateOne({ id: req.params.id }, { disabled: true }).then(() => {
-            res.json({ message: "Review disable success" })
-        }).catch(() => {
-            res.json({ message: "Review disable fail" });
-        });
-    } else res.json({ message: "not permission" });
-}
-
-export function enable(req, res) {
-    if (isAdmin(req)) {
-        Review.updateOne({ id: req.params.id }, { disabled: false }).then(() => {
-            res.json({ message: "Review enable success" })
-        }).catch(() => {
-            res.json({ message: "Review enable fail" });
         });
     } else res.json({ message: "not permission" });
 }
