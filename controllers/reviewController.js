@@ -81,11 +81,27 @@ export function remove(req, res) {
 }
 
 export function update(req, res) {
-    if (isUser(req)) {
-        Review.updateOne({ id: req.params.id }, req.body).then(() => {
-            res.json({ message: "Review update success" })
-        }).catch(() => {
-            res.json({ message: "Review update fail" });
-        });
-    } else res.json({ message: "not permission" });
+    if (!isHaveUser(req)) {
+        return res.status(401).json({ message: "Registered user access required" });
+    }
+
+    const id = req.body.id;
+    const message = req.body.message;
+
+    if (message == "enable" || message == "disable") {
+        Review.updateOne({ id: id }, { disabled: message == "enable" ? false : true })
+            .then(() => {
+                res.json({ message: `Review ${message == "enable" ? "enable" : "Disable"} success` })
+            }).catch(() => {
+                res.status(500).json({ message: "Server error occurred" });
+            });
+    }
+    else {
+        Review.updateOne({ id: id }, { Comment: message })
+            .then(() => {
+                res.json({ message: `Review comment update success` })
+            }).catch(() => {
+                res.status(500).json({ message: "Server error occurred" });
+            });
+    }
 }
