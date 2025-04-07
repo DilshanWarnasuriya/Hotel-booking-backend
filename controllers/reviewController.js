@@ -1,23 +1,33 @@
 import Review from "../Models/review.js";
 import { isHaveUser, isUser } from "./userController.js";
 
-export async function save(req, res) {
-    if (isUser(req)) {
-        req.body.id = await Review.countDocuments() + 1; // Generate new id
-        req.body.email = req.user.email;
-        const newReview = new Review(req.body);
-        newReview.save().then((review) => {
-            res.json({
-                message: "Review added success",
-                review: review
-            })
-        }).catch((err) => {
-            res.json({
-                message: "Review added fail",
-                error: err
-            })
-        });
-    } else res.json({ message: "not permission" });
+export function persist(req, res) {
+    if (!isUser(req)) {
+        return res.status(401).json({ message: "User access required" });
+    }
+
+    req.body.email = req.user.email;
+    req.body.name = req.user.name;
+    req.body.image = req.user.image;
+
+    Review.findOne().sort({ id: -1 })
+        .then((review) => {
+            req.body.id = review ? review.id + 1 : 1;
+            const newReview = new Review(req.body);
+            newReview.save()
+                .then((review) => {
+                    res.status(201).json({
+                        message: "Review Save Successful",
+                        review: review
+                    })
+                })
+                .catch((err) => {
+                    res.status(500).json({ message: "Server error occurred", error: err.message });
+                })
+        })
+        .catch((err) => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
+        })
 }
 
 export function retrieve(req, res) {

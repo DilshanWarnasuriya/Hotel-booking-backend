@@ -1,9 +1,9 @@
 import express from 'express'
-import { findByEmail, retrieve, remove, save, update } from '../Controllers/reviewController.js';
+import { findByEmail, retrieve, remove, update, persist } from '../Controllers/reviewController.js';
 
 const reviewRouter = express.Router();
 
-reviewRouter.post("/", save);
+reviewRouter.post("/", persist);
 
 reviewRouter.get("/", retrieve);
 
