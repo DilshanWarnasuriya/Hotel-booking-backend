@@ -71,13 +71,16 @@ export function retrieve(req, res) {
 }
 
 export function findByEmail(req, res) {
-    if (isUser(req)) {
-        Review.find({ email: req.params.email }).then((result) => {
+    if (!isUser(req)) {
+        return res.status(401).json({ message: "User access required" });
+    }
+
+    Review.find({ email: req.params.email })
+        .then((result) => {
             res.json(result);
         }).catch(() => {
             res.json({ message: "Server error" });
         });
-    } else res.json({ message: "not permission" });
 }
 
 export function remove(req, res) {

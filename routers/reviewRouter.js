@@ -7,7 +7,7 @@ reviewRouter.post("/", persist);
 
 reviewRouter.get("/", retrieve);
 
-reviewRouter.get("/:email", findByEmail);
+reviewRouter.get("/email/:email", findByEmail);
 
 reviewRouter.delete("/:id", remove);
 
