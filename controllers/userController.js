@@ -48,6 +48,7 @@ export function persist(req, res) {
 }
 
 export function login(req, res) {
+
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passwordRegex = /^.{8,}$/
     const contactNoRegex = /^0\d{9}$/;
@@ -73,10 +74,10 @@ export function login(req, res) {
         }
 
         const payload = {
-            id: user.id,
             name: user.title + ". " + user.firstName + " " + user.lastName,
             type: user.type,
             image: user.image,
+            contactNo: user.contactNo,
             email: user.email
         }
 
