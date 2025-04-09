@@ -261,6 +261,43 @@ export function remove(req, res) {
         })
 }
 
+export function changePassword(req, res) {
+    const passwordRegex = /^.{8,}$/
+
+    if (!isHaveUser(req)) {
+        return res.status(401).json({ message: "Registered user access required" });
+    }
+    if (!passwordRegex.test(req.body.oldPassword)) {
+        return res.status(401).json({ message: "Enter valid Current password" });
+    }
+    if (!passwordRegex.test(req.body.newPassword)) {
+        return res.status(401).json({ message: "Enter valid new password" });
+    }
+
+    User.findOne({ id: req.body.contactNo }) // find user
+        .then((user) => {
+            if (!user) {
+                return res.status(401).json({ message: "This user not found" });
+            }
+            if (!passwordHash.verify(req.body.oldPassword, user.password)) { // check enter old password is equals current password
+                return res.status(401).json({ message: "Current password is Wrong" });
+            }
+
+            req.body.password = passwordHash.generate(req.body.newPassword); // New Password hash
+
+            User.updateOne({ id: req.body.id }, req.body) // update new password
+                .then(() => {
+                    res.status(200).json({ message: "Password Change Successful" });
+                })
+                .catch((err) => {
+                    res.status(500).json({ message: "Server error occurred", error: err.message });
+                });
+        })
+        .catch((err) => {
+            return res.status(500).json({ message: "Server error occurred", error: err.message });
+        });
+}
+
 
 // Check user hear
 export function isHaveUser(req) {
