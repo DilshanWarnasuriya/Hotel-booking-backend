@@ -9,7 +9,14 @@ const bookingSchema = mongoose.Schema({
         type: Number,
         required: true
     },
-    email: {
+    name: { 
+        type: String,
+        required: true
+    },
+    image: { 
+        type: String
+    },
+    contactNo: { 
         type: String,
         required: true
     },
@@ -17,15 +24,23 @@ const bookingSchema = mongoose.Schema({
         type: Number,
         required: true
     },
-    startDate: {
+    startDate: { 
         type: Date,
         required: true
     },
-    endDate: {
+    endDate: { 
         type: Date,
         required: true
     },
-    status: {
+    checkIn: { 
+        type: Date,
+        required: true
+    },
+    checkOut: { 
+        type: Date,
+        required: true
+    },
+    status: { 
         type: String,
         default: "pending"
     },
@@ -33,14 +48,14 @@ const bookingSchema = mongoose.Schema({
         type: String,
         default: ""
     },
-    notes: {
-        type: String,
-        default: ""
-    },
     timeStamp: {
         type: Date,
         default: Date.now
-    }
+    },
+    payed: {
+        type: Boolean,
+        default: false
+    },
 });
 
 export default mongoose.model("booking", bookingSchema);
