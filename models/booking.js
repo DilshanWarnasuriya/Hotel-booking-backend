@@ -34,15 +34,14 @@ const bookingSchema = mongoose.Schema({
     },
     checkIn: { 
         type: Date,
-        required: true
     },
     checkOut: { 
         type: Date,
-        required: true
     },
     status: { 
         type: String,
-        default: "pending"
+        default: "pending",
+        required: true
     },
     reason: {
         type: String,
@@ -54,7 +53,8 @@ const bookingSchema = mongoose.Schema({
     },
     payed: {
         type: Boolean,
-        default: false
+        default: false,
+        required: true
     },
 });
 
