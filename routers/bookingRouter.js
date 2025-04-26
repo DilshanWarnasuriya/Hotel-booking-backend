@@ -1,9 +1,9 @@
 import express from 'express'
-import { create, findById, retrieve } from '../Controllers/bookingController.js';
+import { persist, retrieve, findById} from '../Controllers/bookingController.js';
 
 const bookingRouter = express.Router();
 
-bookingRouter.post("/", create);
+bookingRouter.post("/", persist);
 
 bookingRouter.get("/", retrieve);
 
