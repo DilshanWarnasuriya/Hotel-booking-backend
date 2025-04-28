@@ -112,3 +112,26 @@ export function findById(req, res) {
             res.status(500).json({ message: "Server error occurred", error: err.message });
         });
 }
+
+export function findByContactNo(req, res) {
+    if (!isAdmin(req)) {
+        return res.status(401).json({ message: "Admin access required" });
+    }
+
+    const status = req.query.status.toLowerCase()
+    const contactNo = req.query.contactNo;
+
+    Booking.find({ contactNo: contactNo, status: status })
+        .then(booking => {
+            if (booking.length == 0) {
+                return res.status(404).json({ message: "Booking Not found" });
+            }
+            res.status(200).json({
+                message: "Booking found",
+                booking: booking
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
+        });
+}
