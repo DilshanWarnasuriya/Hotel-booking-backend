@@ -98,9 +98,17 @@ export function findById(req, res) {
     if (!isAdmin(req)) {
         return res.status(401).json({ message: "Admin access required" });
     }
-    Booking.find({ id: req.params.id }).then((result) => {
-        res.json(result)
-    }).catch(() => {
-        res.json({ message: "Server error" })
-    });
+    Booking.findOne({ id: req.params.id })
+        .then(booking => {
+            if (!booking) {
+                return res.status(404).json({ message: "Booking Not found" });
+            }
+            res.status(200).json({
+                message: "Booking found",
+                booking: booking
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
+        });
 }
