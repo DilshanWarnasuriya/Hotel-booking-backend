@@ -47,7 +47,7 @@ export async function persist(req, res) {
         });
 
         // find rooms using given category, available, person count and not bookedRoomNo array
-        const rooms = await Room.find({ number: { $nin: bookedRoomNo }, maxPerson: {$gte: req.body.personCount}, disabled: false, category: req.body.category });
+        const rooms = await Room.find({ number: { $nin: bookedRoomNo }, maxPerson: { $gte: req.body.personCount }, disabled: false, category: req.body.category });
 
         if (rooms.length === 0) {
             return res.status(401).json({ message: "Rooms not available this days" });
@@ -95,11 +95,12 @@ export function retrieve(req, res) {
 }
 
 export function findById(req, res) {
-    if (isAdmin(req)) {
-        Booking.find({ id: req.params.id }).then((result) => {
-            res.json(result)
-        }).catch(() => {
-            res.json({ message: "Server error" })
-        });
-    } else res.json({ message: "not permission" });
+    if (!isAdmin(req)) {
+        return res.status(401).json({ message: "Admin access required" });
+    }
+    Booking.find({ id: req.params.id }).then((result) => {
+        res.json(result)
+    }).catch(() => {
+        res.json({ message: "Server error" })
+    });
 }
